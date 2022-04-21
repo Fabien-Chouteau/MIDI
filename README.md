@@ -1,2 +1,2 @@
 # MIDI
-MIDI util library for Ada
+Ada library to encode and decode MIDI messages
