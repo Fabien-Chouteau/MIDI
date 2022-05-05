@@ -8,44 +8,18 @@ with GNAT.OS_Lib;
 with Testsuite.Decode;
 with Testsuite.Encode;
 
+with MIDI.Signal_Flow;
+with MIDI.Signal_Flow.Cable_Mixer;
+with MIDI.Signal_Flow.Cable_Printer;
+with MIDI.Signal_Flow.Channel_Filter;
+with MIDI.Signal_Flow.Channel_Printer;
+with MIDI.Signal_Flow.Channel_Keyboard_Split;
+with MIDI.Signal_Flow.LiteGraph;
+
 procedure Tests is
-   --  Dec : MIDI.Decoder.Instance;
-   --
-   --  ---------------
-   --  -- Print_Msg --
-   --  ---------------
-   --
-   --  procedure Print_Msg (Msg : MIDI.Message) is
-   --  begin
-   --     Ada.Text_IO.Put_Line (MIDI.Img (Msg));
-   --  end Print_Msg;
-   --
-   --  procedure Push is new MIDI.Decoder.Push (Print_Msg);
-   --
-   --  Data_In : constant HAL.UInt8_Array :=
-   --    (16#80#, 16#2A#, 16#2A#,
-   --     16#91#, 16#2A#, 16#2A#,
-   --     16#A2#, 16#2A#, 16#2A#,
-   --     16#B3#, 16#2A#, 16#2A#,
-   --     16#C4#, 16#2A#,
-   --     16#D4#, 16#2A#,
-   --     16#E4#, 16#2A#,
-   --     16#F2#, 16#2A#, 16#2A#,
-   --     16#F3#, 16#2A#,
-   --     16#F5#, 16#2A#,
-   --     16#F0#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#F7#,
-   --     16#F6#,
-   --     16#F7#,
-   --     16#F8#,
-   --     16#FA#,
-   --     16#FB#,
-   --     16#FC#,
-   --     16#FE#,
-   --     16#FF#);
-
    Failures : Natural := 0;
-
 begin
+
    declare
       Suite : aliased AUnit.Test_Suites.Test_Suite;
 
@@ -75,4 +49,47 @@ begin
    if Failures /= 0 then
       GNAT.OS_Lib.OS_Exit (1);
    end if;
+
+   declare
+      use MIDI.Signal_Flow;
+      use MIDI;
+
+      Mix1  : constant Cable_Mixer.Any_Node_Acc := Cable_Mixer.Create;
+      Mix2  : constant Cable_Mixer.Any_Node_Acc := Cable_Mixer.Create;
+      Filter : constant Channel_Filter.Any_Node_Acc := Channel_Filter.Create;
+      Print_Cable : constant Cable_Printer.Any_Node_Acc :=
+        Cable_Printer.Create;
+      Print_Chan : constant Channel_Printer.Any_Node_Acc :=
+        Channel_Printer.Create;
+
+      Split  : constant Channel_Keyboard_Split.Any_Node_Acc :=
+        Channel_Keyboard_Split.Create;
+
+   begin
+      Mix1.Connect (new Link, Cable_Link, 1, Any_Node_Acc (Filter), 1);
+      Filter.Connect (new Link, Cable_Link, 2, Any_Node_Acc (Mix2), 1);
+      Filter.Connect (new Link, Channel_Link, 1, Any_Node_Acc (Print_Chan), 1);
+      Filter.Connect (new Link, Channel_Link, 1, Any_Node_Acc (Split), 1);
+      Mix2.Connect (new Link, Cable_Link, 1, Any_Node_Acc (Print_Cable), 1);
+
+      Mix1.Receive (1, (Kind => Note_On,
+                        Chan => 2,
+                        Key => 2,
+                        Velocity => 3));
+      Mix1.Receive (1, (Kind => Note_On,
+                        Chan => 1,
+                        Key => 2,
+                        Velocity => 3));
+      Mix1.Receive (1, (Kind => Note_On,
+                        Chan => 2,
+                        Key => 2,
+                        Velocity => 3));
+
+      LiteGraph.Print_Definition (Mix1.all);
+      LiteGraph.Print_Definition (Print_Chan.all);
+      LiteGraph.Print_Definition (Print_Cable.all);
+      LiteGraph.Print_Definition (Filter.all);
+      LiteGraph.Print_Definition (Split.all);
+   end;
+
 end Tests;
