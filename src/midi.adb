@@ -8,20 +8,34 @@ package body MIDI is
    begin
       case Msg.Kind is
          when Note_Off =>
-            return "(Note Off," & Msg.Key'Img & "," & Msg.Velocity'Img & ")";
+         return "(Note Off," & Msg.Chan'Img & "," &
+           Msg.Key'Img & "," &
+           Msg.Velocity'Img & ")";
+
          when Note_On =>
-            return "(Note On," & Msg.Key'Img & "," & Msg.Velocity'Img & ")";
+            return "(Note On," & Msg.Chan'Img & "," & Msg.Key'Img & "," &
+              Msg.Velocity'Img & ")";
+
          when Aftertouch =>
-            return "(Aftertouch," & Msg.Key'Img & "," & Msg.Velocity'Img & ")";
+            return "(Aftertouch," & Msg.Chan'Img & "," & Msg.Key'Img & "," &
+              Msg.Velocity'Img & ")";
+
          when Continous_Controller =>
-            return "(Continous Controller," & Msg.Controller'Img & "," &
+            return "(Continous Controller," & Msg.Chan'Img & "," &
+              Msg.Controller'Img & "," &
               Msg.Controller_Value'Img & ")";
+
          when Patch_Change =>
-            return "(Patch Change," & Msg.Instrument'Img & ")";
+            return "(Patch Change," & Msg.Chan'Img & "," &
+              Msg.Instrument'Img & ")";
+
          when Channel_Pressure =>
-            return "(Channel Pressure," & Msg.Pressure'Img & ")";
+            return "(Channel Pressure," & Msg.Chan'Img & "," &
+              Msg.Pressure'Img & ")";
+
          when Pitch_Bend =>
-            return "(Pitch Bend," & Msg.Bend'Img & ")";
+            return "(Pitch Bend," & Msg.Chan'Img & "," & Msg.Bend'Img & ")";
+
          when Sys =>
             case Msg.Cmd is
                when Exclusive =>
