@@ -1,8 +1,6 @@
 
 --  This package provides types representing MIDI messages and data
 
-with HAL;
-
 package MIDI
 with Preelaborate
 is
@@ -53,7 +51,8 @@ is
                         Active_Sensing => 16#E#,
                         Reset          => 16#F#);
 
-   subtype MIDI_Data is HAL.UInt8 range 2#0000_0000# .. 2#0111_1111#;
+   type MIDI_UInt8 is mod 2**8 with Size => 8;
+   subtype MIDI_Data is MIDI_UInt8 range 2#0000_0000# .. 2#0111_1111#;
    subtype MIDI_Key is MIDI_Data;
    type MIDI_Channel is mod 2**4 with Size => 4;
 
@@ -105,7 +104,7 @@ is
 
    function Img (Msg : Message) return String;
 
-   type Octaves is new HAL.UInt8 range 1 .. 8;
+   type Octaves is new MIDI_UInt8 range 1 .. 8;
    type Notes is (C, Cs, D, Ds, E, F, Fs, G, Gs, A, As, B);
 
    function Key (Oct : Octaves; N : Notes) return MIDI_Key

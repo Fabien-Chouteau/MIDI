@@ -1,3 +1,4 @@
+with HAL;
 with System.Storage_Elements;
 
 package MIDI.Encoder is

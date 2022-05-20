@@ -1,3 +1,5 @@
+with HAL;
+
 package MIDI.Decoder is
 
    type Instance
