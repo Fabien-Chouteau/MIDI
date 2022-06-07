@@ -11,3 +11,4 @@ tags = ["midi", "embedded", "nostd"]
 [[depends-on]]
 hal = "~0.3.0"
 bbqueue = "~0.3.0"
+gnat = ">=11"
