@@ -32,6 +32,30 @@ package body MIDI.Decoder.Queue is
       Dec_Push (This.Dec, Byte);
    end Push;
 
+   ---------
+   -- Pop --
+   ---------
+
+   procedure Pop (This    : in out Instance;
+                  Msg     :    out Message;
+                  Success :    out Boolean)
+   is
+      RG : Read_Grant;
+   begin
+
+      Read (This.Queue, RG, 1);
+
+      if State (RG) = Valid then
+
+         Msg := This.Messages (This.Messages'First + Slice (RG).From);
+         Success := True;
+         Release (This.Queue, RG);
+      else
+         Success := False;
+      end if;
+
+   end Pop;
+
    -----------
    -- Flush --
    -----------

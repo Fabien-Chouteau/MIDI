@@ -8,6 +8,10 @@ package MIDI.Decoder.Queue is
 
    procedure Push (This : in out Instance; Byte : HAL.UInt8);
 
+   procedure Pop (This    : in out Instance;
+                  Msg     :    out Message;
+                  Success :    out Boolean);
+
    generic
       with procedure Message_Decoded (Msg : Message);
    procedure Flush (This : in out Instance);
