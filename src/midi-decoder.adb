@@ -9,7 +9,6 @@ package body MIDI.Decoder is
    ----------
 
    procedure Push (This : in out Instance; Byte : HAL.UInt8) is
-      use type HAL.UInt8;
 
       function Is_Status return Boolean
       is ((Byte and 2#1000_0000#) /= 0);
