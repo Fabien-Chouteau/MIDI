@@ -2,6 +2,8 @@ package MIDI.Time
 with Preelaborate
 is
 
+   type BPM is new Float range 0.01 .. 2000.00;
+
    type Step_Count is mod 48;
 
    type Time_Division is (Div_4, Div_8, Div_16, Div_32,

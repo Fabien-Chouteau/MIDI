@@ -4,7 +4,7 @@ generic
    with function Clock return Microseconds_Count;
    --  Return the count of microseconds since the start of the system
 
-   with function BPM return Positive;
+   with function BPM return BPM;
    --  Return current Beat Per Minute setting
 
    with procedure Tick_Callback (Step : Step_Count);
@@ -48,7 +48,7 @@ package MIDI.Time.Generic_Clock is
    procedure Update;
    --  This procedure has to be called at regular intervals to update the
    --  state of the clock. Calling Update at higher frequency will result
-   --  in a more precise cloc. We recommend starting with 1KHz (call every
+   --  in a more precise clock. We recommend starting with 1KHz (call every
    --  milliseconds), and adjust if need be.
 
    procedure Internal_Start;

@@ -10,7 +10,8 @@ package body MIDI.Time.Generic_Clock is
 
    function Internal_Clock_Period return Microseconds_Count is
    begin
-      return Microseconds_Count ((1000 * 1000 * 60) / (BPM * 24));
+      return Microseconds_Count ((1000.0 * 1000.0 * 60.0) /
+                                 (Float (BPM) * 24.0));
    end Internal_Clock_Period;
 
    -----------
