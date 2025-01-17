@@ -9,6 +9,6 @@ website = "https://github.com/Fabien-Chouteau/MIDI"
 tags = ["midi", "embedded", "nostd"]
 
 [[depends-on]]
-hal = "~0.3.0"
-bbqueue = "~0.3.0"
+hal = "^1.0.0"
+bbqueue = "^1.0.0"
 gnat = ">=11"
